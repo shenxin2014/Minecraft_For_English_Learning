@@ -1,0 +1,1969 @@
+openapi: 3.1.0
+info:
+  title: Minecraft AI English — Farm
+  version: 0.4.0
+paths:
+  /health:
+    get:
+      summary: Health
+      description: 报告离线适配器状态，不声称真实游戏或语音已连接。
+      operationId: health_health_get
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthResponse'
+  /v1/sessions:
+    post:
+      summary: Create Session
+      description: 创建或幂等返回已有匿名会话。
+      operationId: create_session_v1_sessions_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateSession'
+        required: true
+      responses:
+        '201':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SessionView'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/sessions/{session_id}:
+    get:
+      summary: Get Session
+      description: 读取当前任务与状态，供断线后的客户端恢复。
+      operationId: get_session_v1_sessions__session_id__get
+      parameters:
+      - name: session_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Session Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SessionView'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/sessions/{session_id}/start:
+    post:
+      summary: Start Session
+      description: 开始课次，沿用控制通道的单调递增序列。
+      operationId: start_session_v1_sessions__session_id__start_post
+      parameters:
+      - name: session_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Session Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StartEvent'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EventResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/sessions/{session_id}/control:
+    post:
+      summary: Control Session
+      description: 执行暂停、重听、帮助、跳过等明确的用户操作。
+      operationId: control_session_v1_sessions__session_id__control_post
+      parameters:
+      - name: session_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Session Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ControlEvent'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EventResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/progress/{session_id}:
+    get:
+      summary: Get Progress
+      description: 返回剧情与学习分离的基础观察报告。
+      operationId: get_progress_v1_progress__session_id__get
+      parameters:
+      - name: session_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Session Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProgressResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/game/events:
+    post:
+      summary: Game Event
+      description: 接收适配器标准化后的视觉和实体事件。
+      operationId: game_event_v1_game_events_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GameEvent'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EventResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/voice/events:
+    post:
+      summary: Voice Event
+      description: 接收播放与可选口语事件，转录文本不持久化。
+      operationId: voice_event_v1_voice_events_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VoiceEvent'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EventResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/{audience}/actions:
+    get:
+      summary: Get Actions
+      description: 返回有序待执行命令，客户端按 command_id 去重。
+      operationId: get_actions_v1__audience__actions_get
+      parameters:
+      - name: audience
+        in: path
+        required: true
+        schema:
+          enum:
+          - game
+          - voice
+          type: string
+          title: Audience
+      - name: session_id
+        in: query
+        required: true
+        schema:
+          type: string
+          title: Session Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Command'
+                title: Response Get Actions V1  Audience  Actions Get
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/{audience}/actions/{command_id}/ack:
+    post:
+      summary: Acknowledge
+      description: 确认动作传输结果；不会凭确认请求给课程加分。
+      operationId: acknowledge_v1__audience__actions__command_id__ack_post
+      parameters:
+      - name: audience
+        in: path
+        required: true
+        schema:
+          enum:
+          - game
+          - voice
+          type: string
+          title: Audience
+      - name: command_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Command Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Ack'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AckResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/bds/bindings:
+    post:
+      summary: Bind
+      description: 操作员创建持久绑定，不允许游戏端改绑。
+      operationId: bind_v1_bds_bindings_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BindingRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BridgeContext'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/bds/context/{bridge_id}:
+    get:
+      summary: Context
+      description: 游戏端恢复上下文和已处理事件序号。
+      operationId: context_v1_bds_context__bridge_id__get
+      parameters:
+      - name: bridge_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Bridge Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BridgeContext'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/bds/events:
+    post:
+      summary: Event
+      description: 把受限的标准化交互交给原有幂等课程引擎。
+      operationId: event_v1_bds_events_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BedrockEnvelope'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EventResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/bds/probe:
+    post:
+      summary: Probe
+      description: 网络探针仅记录到达，不替代实体交互测试。
+      operationId: probe_v1_bds_probe_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProbeRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProbeResult'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/bds/status/{bridge_id}:
+    get:
+      summary: Status
+      description: 供本机操作员读取网络诊断结果。
+      operationId: status_v1_bds_status__bridge_id__get
+      parameters:
+      - name: bridge_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Bridge Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProbeResult'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/bds/lesson/events:
+    post:
+      summary: Event
+      description: 执行显式受限的游戏输入，复用 game 通道幂等游标。
+      operationId: event_v1_bds_lesson_events_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LessonEnvelope'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EventResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/bds/lesson/presence:
+    post:
+      summary: Presence
+      description: 更新短期视觉租约，不修改学习成绩。
+      operationId: presence_v1_bds_lesson_presence_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Presence'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                additionalProperties: true
+                type: object
+                title: Response Presence V1 Bds Lesson Presence Post
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/bds/lesson/actions/{bridge_id}:
+    get:
+      summary: Actions
+      description: BDS 拉取白名单游戏动作。
+      operationId: actions_v1_bds_lesson_actions__bridge_id__get
+      parameters:
+      - name: bridge_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Bridge Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LessonActions'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/bds/lesson/ack/{command_id}:
+    post:
+      summary: Acknowledge
+      description: 确认指定课次的已执行动作。
+      operationId: acknowledge_v1_bds_lesson_ack__command_id__post
+      parameters:
+      - name: command_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Command Id
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LessonAck'
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AckResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/bds/lesson/latency:
+    post:
+      summary: Sample
+      description: 保存去重后的本机耗时样本。
+      operationId: sample_v1_bds_lesson_latency_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LatencySample'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                additionalProperties: true
+                type: object
+                title: Response Sample V1 Bds Lesson Latency Post
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/bedrock/companion/{bridge_id}:
+    get:
+      summary: Companion
+      description: 返回音频播放前需要核对的最新状态。
+      operationId: companion_v1_bedrock_companion__bridge_id__get
+      parameters:
+      - name: bridge_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Bridge Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CompanionView'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/bedrock/audio:
+    post:
+      summary: Audio
+      description: 核对可见性代次后接收媒体回执；客户端不能伪造游戏事件。
+      operationId: audio_v1_bedrock_audio_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CompanionAudio'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EventResponse'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  /v1/bedrock/metrics/{bridge_id}:
+    get:
+      summary: Metrics
+      description: 操作员读取 P95 样本，空样本不返回零耗时。
+      operationId: metrics_v1_bedrock_metrics__bridge_id__get
+      parameters:
+      - name: bridge_id
+        in: path
+        required: true
+        schema:
+          type: string
+          title: Bridge Id
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+                title: Response Metrics V1 Bedrock Metrics  Bridge Id  Get
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+components:
+  schemas:
+    Ack:
+      properties:
+        session_id:
+          type: string
+          maxLength: 100
+          minLength: 1
+          pattern: ^[A-Za-z0-9_-]+$
+          title: Session Id
+        success:
+          type: boolean
+          title: Success
+          default: true
+      additionalProperties: false
+      type: object
+      required:
+      - session_id
+      title: Ack
+      description: 确认命令执行结果，失败命令保留供再次拉取。
+    AckResponse:
+      properties:
+        command_id:
+          type: string
+          maxLength: 100
+          minLength: 1
+          pattern: ^[A-Za-z0-9_-]+$
+          title: Command Id
+        status:
+          type: string
+          enum:
+          - pending
+          - acked
+          - cancelled
+          title: Status
+      additionalProperties: false
+      type: object
+      required:
+      - command_id
+      - status
+      title: AckResponse
+      description: 报告命令的传输状态，不表示教学任务是否正确完成。
+    BedrockEnvelope:
+      properties:
+        bridge_id:
+          type: string
+          maxLength: 100
+          minLength: 1
+          pattern: ^[A-Za-z0-9_-]+$
+          title: Bridge Id
+        event:
+          $ref: '#/components/schemas/BedrockInteraction'
+      additionalProperties: false
+      type: object
+      required:
+      - bridge_id
+      - event
+      title: BedrockEnvelope
+      description: 固定桥接身份与事件，重试必须完整复用相同正文。
+    BedrockInteraction:
+      properties:
+        event_id:
+          type: string
+          maxLength: 100
+          minLength: 1
+          pattern: ^[A-Za-z0-9_-]+$
+          title: Event Id
+        session_id:
+          type: string
+          maxLength: 100
+          minLength: 1
+          pattern: ^[A-Za-z0-9_-]+$
+          title: Session Id
+        player_id:
+          type: string
+          maxLength: 100
+          minLength: 1
+          pattern: ^[A-Za-z0-9_-]+$
+          title: Player Id
+        task_id:
+          type: string
+          maxLength: 100
+          minLength: 1
+          pattern: ^[A-Za-z0-9_-]+$
+          title: Task Id
+        kind:
+          type: string
+          const: ENTITY_INTERACTED
+          title: Kind
+        sequence:
+          type: integer
+          minimum: 1.0
+          title: Sequence
+        occurred_at:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Occurred At
+        entity_type:
+          anyOf:
+          - type: string
+            enum:
+            - minecraft:cow
+            - minecraft:pig
+          - type: 'null'
+          title: Entity Type
+        command_id:
+          type: 'null'
+          title: Command Id
+        transcript:
+          type: 'null'
+          title: Transcript
+        provider:
+          type: string
+          const: bedrock.playerInteractWithEntityAfterEvent
+          title: Provider
+      additionalProperties: false
+      type: object
+      required:
+      - event_id
+      - session_id
+      - player_id
+      - task_id
+      - kind
+      - sequence
+      - provider
+      title: BedrockInteraction
+      description: 仅允许成功的原生实体交互，禁止上报虚构视觉和布局完成。
+    BindingRequest:
+      properties:
+        bridge_id:
+          type: string
+          maxLength: 100
+          minLength: 1
+          pattern: ^[A-Za-z0-9_-]+$
+          title: Bridge Id
+        session_id:
+          type: string
+          maxLength: 100
+          minLength: 1
+          pattern: ^[A-Za-z0-9_-]+$
+          title: Session Id
+      additionalProperties: false
+      type: object
+      required:
+      - bridge_id
+      - session_id
+      title: BindingRequest
+      description: 由本机操作员将一个新课次交给指定 BDS 世界。
+    BridgeContext:
+      properties:
+        bridge_id:
+          type: string
+          maxLength: 100
+          minLength: 1
+          pattern: ^[A-Za-z0-9_-]+$
+          title: Bridge Id
+        session:
+          $ref: '#/components/schemas/SessionView'
+      additionalProperties: false
+      type: object
+      required:
+      - bridge_id
+      - session
+      title: BridgeContext
+      description: 提供事件归属上下文；不表示场景已呈现或音频已播放。
+    Command:
+      properties:
+        command_id:
+          type: string
+          maxLength: 100
+          minLength: 1
+          pattern: ^[A-Za-z0-9_-]+$
+          title: Command Id
+        session_id:
+          type: string
+          maxLength: 100
+          minLength: 1
+          pattern: ^[A-Za-z0-9_-]+$
+          title: Session Id
+        task_id:
+          type: string
+          maxLength: 100
+          minLength: 1
+          pattern: ^[A-Za-z0-9_-]+$
+          title: Task Id
+        audience:
+          type: string
+          enum:
+          - game
+          - voice
+          title: Audience
+        type:
+          type: string
+          enum:
+          - PLAY_FEEDBACK
+          - SHOW_HINT
+          - HIGHLIGHT_ENTITY
+          - UNLOCK_GATE
+          - GRANT_COSMETIC
+          - SHOW_TITLE
+          - PLAY_AUDIO
+          - STOP_AUDIO
+          title: Type
+        target_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Target Id
+        audio_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Audio Id
+        hint_level:
+          type: integer
+          title: Hint Level
+          default: 0
+        randomize_positions:
+          type: boolean
+          title: Randomize Positions
+          default: false
+        caused_by_event_id:
+          anyOf:
+          - type: string
+            maxLength: 100
+            minLength: 1
+            pattern: ^[A-Za-z0-9_-]+$
+          - type: 'null'
+          title: Caused By Event Id
+      additionalProperties: false
+      type: object
+      required:
+      - session_id
+      - task_id
+      - audience
+      - type
+      title: Command
+      description: 描述指定接收方的可重试动作，接收方必须按 command_id 去重。
+    CompanionAudio:
+      properties:
+        event:
+          $ref: '#/components/schemas/VoiceEvent'
+        visibility_epoch:
+          type: integer
+          minimum: 0.0
+          title: Visibility Epoch
+      additionalProperties: false
+      type: object
+      required:
+      - event
+      - visibility_epoch
+      title: CompanionAudio
+      description: 实际媒体结束回执附带播放开始时的可见性代次。
+    CompanionView:
+      properties:
+        session:
+          $ref: '#/components/schemas/SessionView'
+        visible:
+          type: boolean
+          title: Visible
+        epoch:
+          type: integer
+          title: Epoch
+      additionalProperties: false
+      type: object
+      required:
+      - session
+      - visible
+      - epoch
+      title: CompanionView
+      description: 伴随页读取权威状态与可见性代次，避免自己创建游戏证据。
+    ControlEvent:
+      properties:
+        event_id:
+          type: string
+          maxLength: 100
+          minLength: 1
+          pattern: ^[A-Za-z0-9_-]+$
+          title: Event Id
+        session_id:
+          type: string
+          maxLength: 100
+          minLength: 1
+          pattern: ^[A-Za-z0-9_-]+$
+          title: Session Id
+        player_id:
+          type: string
+          maxLength: 100
+          minLength: 1
+          pattern: ^[A-Za-z0-9_-]+$
+          title: Player Id
+        task_id:
+          type: string
+          maxLength: 100
+          minLength: 1
+          pattern: ^[A-Za-z0-9_-]+$
+          title: Task Id
+        kind:
+          type: string
+          enum:
+          - CONTINUE
+          - HELP
+          - REPLAY
+          - SKIP
+          - PAUSE
+          - RESUME
+          - EXIT
+          - TIMEOUT
+          - OPERATIONAL_HELP
+          - OPERATION_READY
+          title: Kind
+        sequence:
+          type: integer
+          minimum: 1.0
+          title: Sequence
+        occurred_at:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Occurred At
+        entity_type:
+          anyOf:
+          - type: string
+            enum:
+            - minecraft:cow
+            - minecraft:pig
+          - type: 'null'
+          title: Entity Type
+        command_id:
+          anyOf:
+          - type: string
+            maxLength: 100
+            minLength: 1
+            pattern: ^[A-Za-z0-9_-]+$
+          - type: 'null'
+          title: Command Id
+        transcript:
+          anyOf:
+          - type: string
+            maxLength: 500
+          - type: 'null'
+          title: Transcript
+        provider:
+          anyOf:
+          - type: string
+            maxLength: 50
+          - type: 'null'
+          title: Provider
+      additionalProperties: false
+      type: object
+      required:
+      - event_id
+      - session_id
+      - player_id
+      - task_id
+      - kind
+      - sequence
+      title: ControlEvent
+      description: 描述孩子或家长主动发出的课程控制意图。
+    CreateSession:
+      properties:
+        event_id:
+          type: string
+          maxLength: 100
+          minLength: 1
+          pattern: ^[A-Za-z0-9_-]+$
+          title: Event Id
+        player_id:
+          type: string
+          maxLength: 100
+          minLength: 1
+          pattern: ^[A-Za-z0-9_-]+$
+          title: Player Id
+          default: local_player_01
+        lesson_id:
+          type: string
+          maxLength: 100
+          minLength: 1
+          pattern: ^[A-Za-z0-9_-]+$
+          title: Lesson Id
+          default: farm_01
+      additionalProperties: false
+      type: object
+      required:
+      - event_id
+      title: CreateSession
+      description: 创建匿名本地会话，event_id 支持客户端安全重试。
+    EventResponse:
+      properties:
+        result:
+          type: string
+          title: Result
+        duplicate:
+          type: boolean
+          title: Duplicate
+        session:
+          $ref: '#/components/schemas/SessionView'
+      additionalProperties: false
+      type: object
+      required:
+      - result
+      - duplicate
+      - session
+      title: EventResponse
+      description: 返回事件处理原因及处理时的会话状态，重复请求沿用原结果。
+    GameEvent:
+      properties:
+        event_id:
+          type: string
+          maxLength: 100
+          minLength: 1
+          pattern: ^[A-Za-z0-9_-]+$
+          title: Event Id
+        session_id:
+          type: string
+          maxLength: 100
+          minLength: 1
+          pattern: ^[A-Za-z0-9_-]+$
+          title: Session Id
+        player_id:
+          type: string
+          maxLength: 100
+          minLength: 1
+          pattern: ^[A-Za-z0-9_-]+$
+          title: Player Id
+        task_id:
+          type: string
+          maxLength: 100
+          minLength: 1
+          pattern: ^[A-Za-z0-9_-]+$
+          title: Task Id
+        kind:
+          type: string
+          enum:
+          - VISUAL_READY
+          - LAYOUT_READY
+          - ENTITY_INTERACTED
+          title: Kind
+        sequence:
+          type: integer
+          minimum: 1.0
+          title: Sequence
+        occurred_at:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Occurred At
+        entity_type:
+          anyOf:
+          - type: string
+            enum:
+            - minecraft:cow
+            - minecraft:pig
+          - type: 'null'
+          title: Entity Type
+        command_id:
+          anyOf:
+          - type: string
+            maxLength: 100
+            minLength: 1
+            pattern: ^[A-Za-z0-9_-]+$
+          - type: 'null'
+          title: Command Id
+        transcript:
+          anyOf:
+          - type: string
+            maxLength: 500
+          - type: 'null'
+          title: Transcript
+        provider:
+          anyOf:
+          - type: string
+            maxLength: 50
+          - type: 'null'
+          title: Provider
+      additionalProperties: false
+      type: object
+      required:
+      - event_id
+      - session_id
+      - player_id
+      - task_id
+      - kind
+      - sequence
+      title: GameEvent
+      description: 限定游戏适配器输入，并兼容规格示例的 event_type 字段。
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    HealthResponse:
+      properties:
+        status:
+          type: string
+          const: ok
+          title: Status
+        mock_mode:
+          type: boolean
+          const: true
+          title: Mock Mode
+        game:
+          type: string
+          const: mock
+          title: Game
+        speech:
+          type: string
+          const: mock
+          title: Speech
+      additionalProperties: false
+      type: object
+      required:
+      - status
+      - mock_mode
+      - game
+      - speech
+      title: HealthResponse
+      description: 报告默认离线适配模式；真实 BDS 状态由各绑定的探针和租约单独报告。
+    LatencySample:
+      properties:
+        bridge_id:
+          type: string
+          maxLength: 100
+          minLength: 1
+          pattern: ^[A-Za-z0-9_-]+$
+          title: Bridge Id
+        command_id:
+          type: string
+          maxLength: 100
+          minLength: 1
+          pattern: ^[A-Za-z0-9_-]+$
+          title: Command Id
+        elapsed_ms:
+          type: number
+          maximum: 60000.0
+          minimum: 0.0
+          title: Elapsed Ms
+      additionalProperties: false
+      type: object
+      required:
+      - bridge_id
+      - command_id
+      - elapsed_ms
+      title: LatencySample
+      description: 只记录从原始事件到对应动作执行完成的同机耗时。
+    LessonAck:
+      properties:
+        bridge_id:
+          type: string
+          maxLength: 100
+          minLength: 1
+          pattern: ^[A-Za-z0-9_-]+$
+          title: Bridge Id
+        session_id:
+          type: string
+          maxLength: 100
+          minLength: 1
+          pattern: ^[A-Za-z0-9_-]+$
+          title: Session Id
+        success:
+          type: boolean
+          title: Success
+          default: true
+      additionalProperties: false
+      type: object
+      required:
+      - bridge_id
+      - session_id
+      title: LessonAck
+      description: 动作 ACK 必须携带不可变世界绑定。
+    LessonActions:
+      properties:
+        session:
+          $ref: '#/components/schemas/SessionView'
+        commands:
+          items:
+            $ref: '#/components/schemas/Command'
+          type: array
+          title: Commands
+      additionalProperties: false
+      type: object
+      required:
+      - session
+      - commands
+      title: LessonActions
+      description: 同一个数据库快照提供动作与校验它们所需的上下文。
+    LessonControl:
+      properties:
+        event_id:
+          type: string
+          maxLength: 100
+          minLength: 1
+          pattern: ^[A-Za-z0-9_-]+$
+          title: Event Id
+        session_id:
+          type: string
+          maxLength: 100
+          minLength: 1
+          pattern: ^[A-Za-z0-9_-]+$
+          title: Session Id
+        player_id:
+          type: string
+          maxLength: 100
+          minLength: 1
+          pattern: ^[A-Za-z0-9_-]+$
+          title: Player Id
+        task_id:
+          type: string
+          maxLength: 100
+          minLength: 1
+          pattern: ^[A-Za-z0-9_-]+$
+          title: Task Id
+        kind:
+          type: string
+          enum:
+          - START
+          - CONTINUE
+          - HELP
+          - REPLAY
+          - SKIP
+          - PAUSE
+          - RESUME
+          - EXIT
+          title: Kind
+        sequence:
+          type: integer
+          minimum: 1.0
+          title: Sequence
+        occurred_at:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Occurred At
+        entity_type:
+          type: 'null'
+          title: Entity Type
+        command_id:
+          type: 'null'
+          title: Command Id
+        transcript:
+          type: 'null'
+          title: Transcript
+        provider:
+          type: string
+          const: bedrock.m3
+          title: Provider
+      additionalProperties: false
+      type: object
+      required:
+      - event_id
+      - session_id
+      - player_id
+      - task_id
+      - kind
+      - sequence
+      - provider
+      title: LessonControl
+      description: 游戏内操作可发控制意图，不能发语音或学习评分事件。
+    LessonEnvelope:
+      properties:
+        bridge_id:
+          type: string
+          maxLength: 100
+          minLength: 1
+          pattern: ^[A-Za-z0-9_-]+$
+          title: Bridge Id
+        event:
+          anyOf:
+          - $ref: '#/components/schemas/LessonGameEvent'
+          - $ref: '#/components/schemas/LessonControl'
+          title: Event
+      additionalProperties: false
+      type: object
+      required:
+      - bridge_id
+      - event
+      title: LessonEnvelope
+      description: 使用共享 game 序号可靠投递 M3 的游戏内事件。
+    LessonGameEvent:
+      properties:
+        event_id:
+          type: string
+          maxLength: 100
+          minLength: 1
+          pattern: ^[A-Za-z0-9_-]+$
+          title: Event Id
+        session_id:
+          type: string
+          maxLength: 100
+          minLength: 1
+          pattern: ^[A-Za-z0-9_-]+$
+          title: Session Id
+        player_id:
+          type: string
+          maxLength: 100
+          minLength: 1
+          pattern: ^[A-Za-z0-9_-]+$
+          title: Player Id
+        task_id:
+          type: string
+          maxLength: 100
+          minLength: 1
+          pattern: ^[A-Za-z0-9_-]+$
+          title: Task Id
+        kind:
+          type: string
+          enum:
+          - VISUAL_READY
+          - LAYOUT_READY
+          - ENTITY_INTERACTED
+          title: Kind
+        sequence:
+          type: integer
+          minimum: 1.0
+          title: Sequence
+        occurred_at:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Occurred At
+        entity_type:
+          anyOf:
+          - type: string
+            enum:
+            - minecraft:cow
+            - minecraft:pig
+          - type: 'null'
+          title: Entity Type
+        command_id:
+          anyOf:
+          - type: string
+            maxLength: 100
+            minLength: 1
+            pattern: ^[A-Za-z0-9_-]+$
+          - type: 'null'
+          title: Command Id
+        transcript:
+          type: 'null'
+          title: Transcript
+        provider:
+          type: string
+          const: bedrock.m3
+          title: Provider
+      additionalProperties: false
+      type: object
+      required:
+      - event_id
+      - session_id
+      - player_id
+      - task_id
+      - kind
+      - sequence
+      - provider
+      title: LessonGameEvent
+      description: M3 允许已执行视觉动作的回执与玩家的实际选择意图。
+    Presence:
+      properties:
+        bridge_id:
+          type: string
+          maxLength: 100
+          minLength: 1
+          pattern: ^[A-Za-z0-9_-]+$
+          title: Bridge Id
+        task_id:
+          type: string
+          maxLength: 100
+          minLength: 1
+          pattern: ^[A-Za-z0-9_-]+$
+          title: Task Id
+        visual_id:
+          anyOf:
+          - type: string
+            maxLength: 100
+            minLength: 1
+            pattern: ^[A-Za-z0-9_-]+$
+          - type: 'null'
+          title: Visual Id
+        visible:
+          type: boolean
+          title: Visible
+      additionalProperties: false
+      type: object
+      required:
+      - bridge_id
+      - task_id
+      - visual_id
+      - visible
+      title: Presence
+      description: 游戏定期报告当前场景是否可见；未知或断线均视为不可见。
+    ProbeRequest:
+      properties:
+        bridge_id:
+          type: string
+          maxLength: 100
+          minLength: 1
+          pattern: ^[A-Za-z0-9_-]+$
+          title: Bridge Id
+        pack_version:
+          type: string
+          enum:
+          - 0.3.0
+          - 0.4.0
+          title: Pack Version
+        runtime_profile:
+          type: string
+          maxLength: 100
+          minLength: 1
+          pattern: ^[A-Za-z0-9_.-]+$
+          title: Runtime Profile
+      additionalProperties: false
+      type: object
+      required:
+      - bridge_id
+      - pack_version
+      - runtime_profile
+      title: ProbeRequest
+      description: 记录配置版本声明；版本是否真实兼容仍由 BDS 加载日志证明。
+    ProbeResult:
+      properties:
+        bridge_id:
+          type: string
+          maxLength: 100
+          minLength: 1
+          pattern: ^[A-Za-z0-9_-]+$
+          title: Bridge Id
+        http_received:
+          type: boolean
+          title: Http Received
+        received_at:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Received At
+        interaction_receipts:
+          type: integer
+          title: Interaction Receipts
+        gameplay_verified:
+          type: boolean
+          const: false
+          title: Gameplay Verified
+          default: false
+      additionalProperties: false
+      type: object
+      required:
+      - bridge_id
+      - http_received
+      - received_at
+      - interaction_receipts
+      title: ProbeResult
+      description: HTTP 到达记录与真实交互证据分别报告，避免探针冒充实机验收。
+    ProgressResponse:
+      properties:
+        session_id:
+          type: string
+          maxLength: 100
+          minLength: 1
+          pattern: ^[A-Za-z0-9_-]+$
+          title: Session Id
+        state:
+          type: string
+          enum:
+          - READY
+          - INTRODUCING
+          - AWAITING_GAME_ACTION
+          - HINTING
+          - VERIFIED
+          - OPTIONAL_SPEAK
+          - COMPLETE
+          - PAUSED
+          - EXITED
+          title: State
+        video_game_task_complete:
+          type: boolean
+          title: Video Game Task Complete
+        vocab_mastery:
+          additionalProperties:
+            $ref: '#/components/schemas/WordProgress'
+          type: object
+          title: Vocab Mastery
+        completed_tasks:
+          items:
+            type: string
+          type: array
+          title: Completed Tasks
+        skipped_tasks:
+          items:
+            type: string
+          type: array
+          title: Skipped Tasks
+        operational_blocks:
+          type: integer
+          title: Operational Blocks
+        replay_requests:
+          type: integer
+          title: Replay Requests
+        speaking_participations:
+          type: integer
+          title: Speaking Participations
+        note:
+          type: string
+          title: Note
+      additionalProperties: false
+      type: object
+      required:
+      - session_id
+      - state
+      - video_game_task_complete
+      - vocab_mastery
+      - completed_tasks
+      - skipped_tasks
+      - operational_blocks
+      - replay_requests
+      - speaking_participations
+      - note
+      title: ProgressResponse
+      description: 描述探索性的学习观察结果，区分剧情、理解与口语参与。
+    Reward:
+      properties:
+        type:
+          type: string
+          enum:
+          - PLAY_FEEDBACK
+          - SHOW_HINT
+          - HIGHLIGHT_ENTITY
+          - UNLOCK_GATE
+          - GRANT_COSMETIC
+          - SHOW_TITLE
+          title: Type
+        target_id:
+          type: string
+          maxLength: 100
+          minLength: 1
+          pattern: ^[A-Za-z0-9_-]+$
+          title: Target Id
+      additionalProperties: false
+      type: object
+      required:
+      - type
+      - target_id
+      title: Reward
+      description: 描述经课程审核的单个游戏动作。
+    SessionView:
+      properties:
+        session_id:
+          type: string
+          maxLength: 100
+          minLength: 1
+          pattern: ^[A-Za-z0-9_-]+$
+          title: Session Id
+        player_id:
+          type: string
+          maxLength: 100
+          minLength: 1
+          pattern: ^[A-Za-z0-9_-]+$
+          title: Player Id
+        lesson_id:
+          type: string
+          maxLength: 100
+          minLength: 1
+          pattern: ^[A-Za-z0-9_-]+$
+          title: Lesson Id
+        lesson_version:
+          type: string
+          title: Lesson Version
+        state:
+          type: string
+          enum:
+          - READY
+          - INTRODUCING
+          - AWAITING_GAME_ACTION
+          - HINTING
+          - VERIFIED
+          - OPTIONAL_SPEAK
+          - COMPLETE
+          - PAUSED
+          - EXITED
+          title: State
+        current_task:
+          $ref: '#/components/schemas/Task'
+        hint_level:
+          type: integer
+          title: Hint Level
+        voice_mode:
+          type: string
+          enum:
+          - PREGENERATED
+          - OFFLINE_FALLBACK
+          title: Voice Mode
+        sequences:
+          additionalProperties:
+            type: integer
+          type: object
+          title: Sequences
+        active_audio_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Active Audio Id
+        active_visual_id:
+          anyOf:
+          - type: string
+          - type: 'null'
+          title: Active Visual Id
+        video_game_task_complete:
+          type: boolean
+          title: Video Game Task Complete
+        task_index:
+          type: integer
+          title: Task Index
+          default: 0
+        total_tasks:
+          type: integer
+          title: Total Tasks
+          default: 10
+        audio_finished:
+          type: boolean
+          title: Audio Finished
+          default: false
+        visual_ready:
+          type: boolean
+          title: Visual Ready
+          default: false
+        layout_ready:
+          type: boolean
+          title: Layout Ready
+          default: false
+        operation_blocked:
+          type: boolean
+          title: Operation Blocked
+          default: false
+      additionalProperties: false
+      type: object
+      required:
+      - session_id
+      - player_id
+      - lesson_id
+      - lesson_version
+      - state
+      - current_task
+      - hint_level
+      - voice_mode
+      - sequences
+      - active_audio_id
+      - active_visual_id
+      - video_game_task_complete
+      title: SessionView
+      description: 公开课次状态，包含客户端重连需要的任务及事件游标。
+    StartEvent:
+      properties:
+        event_id:
+          type: string
+          maxLength: 100
+          minLength: 1
+          pattern: ^[A-Za-z0-9_-]+$
+          title: Event Id
+        session_id:
+          type: string
+          maxLength: 100
+          minLength: 1
+          pattern: ^[A-Za-z0-9_-]+$
+          title: Session Id
+        player_id:
+          type: string
+          maxLength: 100
+          minLength: 1
+          pattern: ^[A-Za-z0-9_-]+$
+          title: Player Id
+        task_id:
+          type: string
+          maxLength: 100
+          minLength: 1
+          pattern: ^[A-Za-z0-9_-]+$
+          title: Task Id
+        kind:
+          type: string
+          const: START
+          title: Kind
+        sequence:
+          type: integer
+          minimum: 1.0
+          title: Sequence
+        occurred_at:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Occurred At
+        entity_type:
+          anyOf:
+          - type: string
+            enum:
+            - minecraft:cow
+            - minecraft:pig
+          - type: 'null'
+          title: Entity Type
+        command_id:
+          anyOf:
+          - type: string
+            maxLength: 100
+            minLength: 1
+            pattern: ^[A-Za-z0-9_-]+$
+          - type: 'null'
+          title: Command Id
+        transcript:
+          anyOf:
+          - type: string
+            maxLength: 500
+          - type: 'null'
+          title: Transcript
+        provider:
+          anyOf:
+          - type: string
+            maxLength: 50
+          - type: 'null'
+          title: Provider
+      additionalProperties: false
+      type: object
+      required:
+      - event_id
+      - session_id
+      - player_id
+      - task_id
+      - kind
+      - sequence
+      title: StartEvent
+      description: 课程开始接口只接受 START 事件。
+    Task:
+      properties:
+        task_id:
+          type: string
+          maxLength: 100
+          minLength: 1
+          pattern: ^[A-Za-z0-9_-]+$
+          title: Task Id
+        type:
+          type: string
+          enum:
+          - OBSERVE
+          - LISTEN_FIND
+          - OPTIONAL_SPEAK
+          - EXPLORE
+          title: Type
+        prompt_id:
+          type: string
+          maxLength: 100
+          minLength: 1
+          pattern: ^[A-Za-z0-9_-]+$
+          title: Prompt Id
+        target:
+          anyOf:
+          - type: string
+            enum:
+            - cow
+            - pig
+          - type: 'null'
+          title: Target
+        context:
+          type: string
+          maxLength: 100
+          minLength: 1
+          pattern: ^[A-Za-z0-9_-]+$
+          title: Context
+        randomize_positions:
+          type: boolean
+          title: Randomize Positions
+          default: false
+        visual_anchor_required:
+          type: boolean
+          title: Visual Anchor Required
+          default: false
+        hint_steps:
+          items:
+            type: string
+          type: array
+          title: Hint Steps
+        success_actions:
+          items:
+            $ref: '#/components/schemas/Reward'
+          type: array
+          title: Success Actions
+        story_goal:
+          type: boolean
+          title: Story Goal
+          default: false
+      additionalProperties: false
+      type: object
+      required:
+      - task_id
+      - type
+      - prompt_id
+      - context
+      title: Task
+      description: 描述一个教学步骤，避免将游戏完成等同于学习掌握。
+    ValidationError:
+      properties:
+        loc:
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+          type: array
+          title: Location
+        msg:
+          type: string
+          title: Message
+        type:
+          type: string
+          title: Error Type
+        input:
+          title: Input
+        ctx:
+          type: object
+          title: Context
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+    VoiceEvent:
+      properties:
+        event_id:
+          type: string
+          maxLength: 100
+          minLength: 1
+          pattern: ^[A-Za-z0-9_-]+$
+          title: Event Id
+        session_id:
+          type: string
+          maxLength: 100
+          minLength: 1
+          pattern: ^[A-Za-z0-9_-]+$
+          title: Session Id
+        player_id:
+          type: string
+          maxLength: 100
+          minLength: 1
+          pattern: ^[A-Za-z0-9_-]+$
+          title: Player Id
+        task_id:
+          type: string
+          maxLength: 100
+          minLength: 1
+          pattern: ^[A-Za-z0-9_-]+$
+          title: Task Id
+        kind:
+          type: string
+          enum:
+          - AUDIO_FINISHED
+          - AUDIO_FAILED
+          - SPEECH_RECOGNIZED
+          - SPEECH_UNAVAILABLE
+          title: Kind
+        sequence:
+          type: integer
+          minimum: 1.0
+          title: Sequence
+        occurred_at:
+          anyOf:
+          - type: string
+            format: date-time
+          - type: 'null'
+          title: Occurred At
+        entity_type:
+          anyOf:
+          - type: string
+            enum:
+            - minecraft:cow
+            - minecraft:pig
+          - type: 'null'
+          title: Entity Type
+        command_id:
+          anyOf:
+          - type: string
+            maxLength: 100
+            minLength: 1
+            pattern: ^[A-Za-z0-9_-]+$
+          - type: 'null'
+          title: Command Id
+        transcript:
+          anyOf:
+          - type: string
+            maxLength: 500
+          - type: 'null'
+          title: Transcript
+        provider:
+          anyOf:
+          - type: string
+            maxLength: 50
+          - type: 'null'
+          title: Provider
+      additionalProperties: false
+      type: object
+      required:
+      - event_id
+      - session_id
+      - player_id
+      - task_id
+      - kind
+      - sequence
+      title: VoiceEvent
+      description: 限定播放回执和可选口语输入，不能携带游戏选择事件。
+    WordProgress:
+      properties:
+        status:
+          type: string
+          enum:
+          - UNSEEN
+          - INTRODUCED
+          - PRACTICING
+          - UNDERSTANDS
+          - RETENTION_CHECK
+          title: Status
+          default: UNSEEN
+        exposure_count:
+          type: integer
+          title: Exposure Count
+          default: 0
+        independent_correct:
+          type: integer
+          title: Independent Correct
+          default: 0
+        assisted_correct:
+          type: integer
+          title: Assisted Correct
+          default: 0
+        unconfirmed_correct:
+          type: integer
+          title: Unconfirmed Correct
+          default: 0
+        transfer_correct:
+          type: integer
+          title: Transfer Correct
+          default: 0
+        wrong_choices:
+          type: integer
+          title: Wrong Choices
+          default: 0
+        independent_contexts:
+          items:
+            type: string
+          type: array
+          title: Independent Contexts
+        stable_mastery:
+          type: boolean
+          title: Stable Mastery
+          default: false
+      additionalProperties: false
+      type: object
+      title: WordProgress
+      description: 记录学习证据，不从呈现次数推断掌握。

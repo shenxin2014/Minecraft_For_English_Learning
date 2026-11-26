@@ -1,0 +1,254 @@
+/* 小屏仍保持动物目标分离和足够大的触摸区域。 */
+@media (max-width: 1050px) {
+  .app-shell {
+    padding: 0 25px;
+  }
+  .farm {
+    height: 440px;
+  }
+  .welcome-panel {
+    left: 30px;
+    top: 90px;
+    width: 310px;
+  }
+  .welcome-panel h2 {
+    font-size: 32px;
+  }
+  .animal {
+    width: 200px;
+  }
+  .animal-pig {
+    left: 73%;
+  }
+  .farm.live .animal {
+    width: 220px;
+  }
+  .farm.live .animal-pig {
+    left: 64%;
+  }
+  .gentle-note {
+    display: none;
+  }
+  .lesson-controls .skip-button {
+    margin-left: auto;
+  }
+  .teacher-message h2 {
+    font-size: 18px;
+  }
+}
+@media (max-width: 700px) {
+  .app-shell {
+    padding: 0 16px;
+  }
+  .topbar {
+    height: 79px;
+  }
+  .brand {
+    font-size: 22px;
+    gap: 10px;
+  }
+  .brand-mark {
+    width: 37px;
+    height: 37px;
+  }
+  .brand small {
+    font-size: 8px;
+    letter-spacing: 1.7px;
+  }
+  .header-actions {
+    gap: 12px;
+  }
+  .local-tag {
+    display: none;
+  }
+  .header-actions .text-button {
+    font-size: 13px;
+  }
+  .lesson-heading {
+    padding: 22px 0 18px;
+  }
+  .eyebrow {
+    font-size: 11px;
+    letter-spacing: 1px;
+  }
+  h1 {
+    font-size: 23px;
+  }
+  h1 span {
+    font-size: 12px;
+    margin-left: 9px;
+    padding-left: 9px;
+  }
+  .journey {
+    width: 126px;
+  }
+  .journey > span {
+    font-size: 12px;
+  }
+  .journey small {
+    font-size: 10px;
+  }
+  .farm {
+    height: 470px;
+    border-radius: 17px;
+  }
+  .scene-weather {
+    display: none;
+  }
+  .scene-label {
+    top: 15px;
+    left: 15px;
+    font-size: 12px;
+  }
+  .farm-background {
+    object-position: 70% center;
+  }
+  .welcome-panel {
+    top: 69px;
+    left: 25px;
+    width: calc(100% - 50px);
+  }
+  .welcome-panel h2 {
+    font-size: 29px;
+    margin: 8px 0;
+  }
+  .welcome-panel p {
+    font-size: 14px;
+    line-height: 1.6;
+    margin: 10px 0 15px;
+  }
+  .welcome-panel small {
+    font-size: 11px;
+    margin-top: 10px;
+  }
+  .welcome-panel .primary-button {
+    font-size: 14px;
+    padding: 12px 20px;
+  }
+  .welcome-stamp {
+    font-size: 10px;
+  }
+  .animal {
+    width: 155px;
+    height: 155px;
+  }
+  .animal-cow {
+    left: 12%;
+    bottom: 12px;
+  }
+  .animal-pig {
+    left: 55%;
+    bottom: 3px;
+  }
+  .farm.live .animal {
+    width: 46%;
+    max-width: 230px;
+    height: 180px;
+  }
+  .farm.live .animal-cow {
+    left: 3%;
+    bottom: 70px;
+  }
+  .farm.live .animal-pig {
+    left: 53%;
+    bottom: 35px;
+  }
+  .farm.live .animal.slot-right {
+    left: 53%;
+    bottom: 35px;
+  }
+  .farm.live .animal.slot-left {
+    left: 3%;
+    bottom: 70px;
+  }
+  .gate {
+    top: 47%;
+    left: 42%;
+    width: 18%;
+  }
+  .teacher-card {
+    gap: 14px;
+    padding: 20px 16px;
+    flex-wrap: wrap;
+    margin-top: 15px;
+  }
+  .teacher-portrait,
+  .teacher-portrait img {
+    width: 54px;
+    height: 54px;
+  }
+  .teacher-portrait span {
+    font-size: 12px;
+    left: 7px;
+    right: 7px;
+  }
+  .teacher-message {
+    min-width: 190px;
+  }
+  .teacher-message h2 {
+    font-size: 17px;
+  }
+  .teacher-message p {
+    font-size: 12px;
+  }
+  .continue-button {
+    width: 100%;
+    margin-top: 6px;
+  }
+  .support-controls {
+    gap: 8px;
+  }
+  .control-button {
+    font-size: 13px;
+    padding: 11px 12px;
+    gap: 6px;
+  }
+  .control-button svg {
+    width: 17px;
+  }
+  .lesson-controls {
+    gap: 7px;
+    padding: 15px 0;
+  }
+  .skip-button {
+    font-size: 12px;
+    padding: 8px 0;
+  }
+  footer {
+    font-size: 10px;
+    gap: 8px;
+  }
+  .scene-toast {
+    font-size: 13px;
+    max-width: 90%;
+    white-space: normal;
+    text-align: center;
+  }
+  .helper-badge {
+    top: 54px;
+    right: 12px;
+    font-size: 11px;
+  }
+  .route-cue {
+    bottom: 240px;
+    font-size: 12px;
+  }
+  .complete-panel h2,
+  .pause-panel h2 {
+    font-size: 24px;
+  }
+  .complete-panel div {
+    display: flex;
+    flex-direction: column;
+  }
+  .complete-panel .text-button {
+    margin: 15px 0 0;
+  }
+  .notice {
+    font-size: 13px;
+    flex-wrap: wrap;
+  }
+  .volume-setting {
+    font-size: 14px;
+  }
+}

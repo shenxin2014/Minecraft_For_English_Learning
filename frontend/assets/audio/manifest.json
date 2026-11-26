@@ -1,0 +1,21 @@
+{
+  "voice": "Microsoft Zira Desktop - English (United States)",
+  "source": "Windows SAPI local synthesis",
+  "language": "en-US",
+  "rate": -2,
+  "notes": "本地合成教学音频，不是真人录音；生成后运行无需语音服务。H2 使用动物动作线索。",
+  "clips": {
+    "welcome_en": "Hi! I'm Lily. Let's play!",
+    "look_cow_en": "Look! A cow!",
+    "look_pig_en": "Look! A pig!",
+    "find_cow_en": "Find the cow.",
+    "find_pig_en": "Find the pig.",
+    "rescue_cow_en": "Oh! The cow! Find the cow.",
+    "say_cow_en": "Can you say cow?",
+    "free_play_en": "Let's play!",
+    "great_en": "You found it!",
+    "try_again_en": "Let's try again.",
+    "cow_home_en": "The cow is home!",
+    "goodbye_en": "Great exploring! See you soon!"
+  }
+}

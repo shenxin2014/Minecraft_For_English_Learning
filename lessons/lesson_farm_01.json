@@ -1,0 +1,166 @@
+{
+  "lesson_id": "farm_01",
+  "version": "1.1.0",
+  "language_level": "BEGINNER_ZERO",
+  "speaking_policy": "OPTIONAL",
+  "target_vocabulary": [
+    "cow",
+    "pig"
+  ],
+  "known_patterns": [
+    "Look!",
+    "Find the {target}."
+  ],
+  "independent_threshold": 3,
+  "tasks": [
+    {
+      "task_id": "welcome",
+      "type": "EXPLORE",
+      "prompt_id": "welcome_en",
+      "context": "entrance",
+      "hint_steps": [
+        "REPEAT_AUDIO",
+        "PLAY_ANIMAL_SOUND",
+        "HIGHLIGHT_TARGET",
+        "SHOW_ROUTE"
+      ]
+    },
+    {
+      "task_id": "introduce_cow",
+      "type": "OBSERVE",
+      "prompt_id": "look_cow_en",
+      "target": "cow",
+      "context": "cow_pen",
+      "visual_anchor_required": true,
+      "hint_steps": [
+        "REPEAT_AUDIO",
+        "PLAY_ANIMAL_SOUND",
+        "HIGHLIGHT_TARGET",
+        "SHOW_ROUTE"
+      ]
+    },
+    {
+      "task_id": "introduce_pig",
+      "type": "OBSERVE",
+      "prompt_id": "look_pig_en",
+      "target": "pig",
+      "context": "pig_pen",
+      "visual_anchor_required": true,
+      "hint_steps": [
+        "REPEAT_AUDIO",
+        "PLAY_ANIMAL_SOUND",
+        "HIGHLIGHT_TARGET",
+        "SHOW_ROUTE"
+      ]
+    },
+    {
+      "task_id": "find_cow",
+      "type": "LISTEN_FIND",
+      "prompt_id": "find_cow_en",
+      "target": "cow",
+      "context": "mixed_pen",
+      "randomize_positions": true,
+      "success_actions": [
+        {
+          "type": "UNLOCK_GATE",
+          "target_id": "gate_01"
+        }
+      ],
+      "hint_steps": [
+        "REPEAT_AUDIO",
+        "PLAY_ANIMAL_SOUND",
+        "HIGHLIGHT_TARGET",
+        "SHOW_ROUTE"
+      ]
+    },
+    {
+      "task_id": "find_pig",
+      "type": "LISTEN_FIND",
+      "prompt_id": "find_pig_en",
+      "target": "pig",
+      "context": "mixed_pen",
+      "randomize_positions": true,
+      "hint_steps": [
+        "REPEAT_AUDIO",
+        "PLAY_ANIMAL_SOUND",
+        "HIGHLIGHT_TARGET",
+        "SHOW_ROUTE"
+      ]
+    },
+    {
+      "task_id": "rescue_cow",
+      "type": "LISTEN_FIND",
+      "prompt_id": "rescue_cow_en",
+      "target": "cow",
+      "context": "meadow",
+      "randomize_positions": true,
+      "story_goal": true,
+      "success_actions": [
+        {
+          "type": "GRANT_COSMETIC",
+          "target_id": "farm_helper"
+        }
+      ],
+      "hint_steps": [
+        "REPEAT_AUDIO",
+        "PLAY_ANIMAL_SOUND",
+        "HIGHLIGHT_TARGET",
+        "SHOW_ROUTE"
+      ]
+    },
+    {
+      "task_id": "optional_say_cow",
+      "type": "OPTIONAL_SPEAK",
+      "prompt_id": "say_cow_en",
+      "target": "cow",
+      "context": "home_pen",
+      "visual_anchor_required": true,
+      "hint_steps": [
+        "REPEAT_AUDIO",
+        "PLAY_ANIMAL_SOUND",
+        "HIGHLIGHT_TARGET",
+        "SHOW_ROUTE"
+      ]
+    },
+    {
+      "task_id": "free_explore",
+      "type": "EXPLORE",
+      "prompt_id": "free_play_en",
+      "context": "farm",
+      "hint_steps": [
+        "REPEAT_AUDIO",
+        "PLAY_ANIMAL_SOUND",
+        "HIGHLIGHT_TARGET",
+        "SHOW_ROUTE"
+      ]
+    },
+    {
+      "task_id": "review_pig",
+      "type": "LISTEN_FIND",
+      "prompt_id": "find_pig_en",
+      "target": "pig",
+      "context": "review_pen",
+      "randomize_positions": true,
+      "hint_steps": [
+        "REPEAT_AUDIO",
+        "PLAY_ANIMAL_SOUND",
+        "HIGHLIGHT_TARGET",
+        "SHOW_ROUTE"
+      ]
+    },
+    {
+      "task_id": "review_cow",
+      "type": "LISTEN_FIND",
+      "prompt_id": "find_cow_en",
+      "target": "cow",
+      "context": "review_pen",
+      "randomize_positions": true,
+      "hint_steps": [
+        "REPEAT_AUDIO",
+        "PLAY_ANIMAL_SOUND",
+        "HIGHLIGHT_TARGET",
+        "SHOW_ROUTE"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,35 @@
+{
+  "m3-bds-1.26.66-candidate": {
+    "version": [0, 4, 0],
+    "header_uuid": "c912b88b-428d-4ad8-8286-4034cf5d1d31",
+    "script_uuid": "8ec7113a-73e1-40cb-a377-ad40ebea5b6e",
+    "entry": "scripts/lesson-entry.js",
+    "min_engine_version": [1, 26, 66],
+    "dependencies": {
+      "@minecraft/server": "2.11.0",
+      "@minecraft/server-net": "1.0.0-beta.1.26.66-stable",
+      "@minecraft/server-admin": "1.0.0-beta.1.26.66-stable"
+    },
+    "verification": "candidate_only_not_bds_tested"
+  },
+  "diagnostic": {
+    "header_uuid": "3172732d-26b6-4487-afbe-719c8941da82",
+    "script_uuid": "b53be46f-9f75-4d42-82db-0c793cf9cf08",
+    "entry": "scripts/diagnostic.js",
+    "min_engine_version": [1, 21, 80],
+    "dependencies": { "@minecraft/server": "2.0.0" },
+    "verification": "not_game_tested"
+  },
+  "bds-1.26.66-candidate": {
+    "header_uuid": "5c2998f2-edce-4a11-9bd5-a9e5aacbbef8",
+    "script_uuid": "d531d172-a834-4a29-8202-903c9b15295c",
+    "entry": "scripts/bds.js",
+    "min_engine_version": [1, 26, 66],
+    "dependencies": {
+      "@minecraft/server": "2.11.0",
+      "@minecraft/server-net": "1.0.0-beta.1.26.66-stable",
+      "@minecraft/server-admin": "1.0.0-beta.1.26.66-stable"
+    },
+    "verification": "candidate_only_not_bds_tested"
+  }
+}

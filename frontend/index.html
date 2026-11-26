@@ -1,0 +1,223 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="跟着 Lily 听英语、找动物，轻松探索自己的小农场。" />
+    <title>English Farm · Lily 的小农场</title>
+    <link rel="icon" href="/assets/lily.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="/assets/styles.css" />
+    <link rel="stylesheet" href="/assets/layout.css" />
+    <script type="module" src="/js/app.js"></script>
+  </head>
+  <body>
+    <svg class="icon-library" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <defs>
+        <symbol id="leaf" viewBox="0 0 24 24">
+          <path d="M20 3C10 2 3 7 5 15s15 5 15-12Z" />
+          <path d="m4 21 11-12" />
+        </symbol>
+        <symbol id="sound" viewBox="0 0 24 24">
+          <path d="M11 4 5 9H2v6h3l6 5zM15 8q5 4 0 8m3-11q8 7 0 14" />
+        </symbol>
+        <symbol id="replay" viewBox="0 0 24 24"><path d="M3 10a9 9 0 1 1 1 8M3 3v7h7" /></symbol>
+        <symbol id="pause" viewBox="0 0 24 24"><path d="M8 5v14M16 5v14" /></symbol>
+        <symbol id="play" viewBox="0 0 24 24"><path d="m8 4 12 8-12 8z" /></symbol>
+        <symbol id="heart" viewBox="0 0 24 24">
+          <path d="M12 21C-6 9 4-2 12 6 20-2 30 9 12 21Z" />
+        </symbol>
+        <symbol id="help" viewBox="0 0 24 24">
+          <path d="M9 8a3 3 0 1 1 5 2c-2 1-2 2-2 4m0 3v1" />
+          <circle cx="12" cy="12" r="10" />
+        </symbol>
+        <symbol id="check" viewBox="0 0 24 24"><path d="m4 12 5 5L20 6" /></symbol>
+      </defs>
+    </svg>
+    <div class="app-shell">
+      <header class="topbar">
+        <a class="brand" href="/" aria-label="English Farm 首页"
+          ><span class="brand-mark"
+            ><svg><use href="#leaf" /></svg></span
+          ><span>English Farm<small>LILY'S LITTLE WORLD</small></span></a
+        >
+        <div class="header-actions">
+          <span class="local-tag">本地小课堂</span
+          ><button class="text-button" id="parent-button">家长小贴士</button
+          ><button class="round-button" id="pause-button" aria-label="暂停课程" hidden>
+            <svg><use href="#pause" /></svg>
+          </button>
+        </div>
+      </header>
+      <main>
+        <section class="lesson-heading">
+          <div>
+            <p class="eyebrow">听一听 · 找一找 · 玩一玩</p>
+            <h1>我的小农场<span>第一课</span></h1>
+          </div>
+          <div class="journey" id="journey" aria-label="农场旅程">
+            <span id="stage-label">准备出发</span>
+            <div
+              class="journey-track"
+              role="progressbar"
+              aria-label="课程进度"
+              aria-valuemin="0"
+              aria-valuemax="10"
+              aria-valuenow="0"
+              id="journey-bar"
+            >
+              <i id="journey-fill"></i>
+            </div>
+            <small id="step-label">慢慢来，每一步都算数</small>
+          </div>
+        </section>
+        <div class="notice" id="notice" role="status" hidden>
+          <span id="notice-message"></span><button id="reconnect-button" hidden>重新连接</button
+          ><button id="unlock-button" hidden>点我播放声音</button>
+        </div>
+        <section class="farm" id="farm" aria-label="互动农场" data-context="entrance">
+          <img
+            class="farm-background"
+            src="/assets/farm.svg"
+            alt="青绿的草地、木栅栏和红色谷仓"
+            draggable="false"
+          />
+          <div class="scene-label">
+            <span class="scene-leaf">✿</span><span id="scene-label">Lily 的小农场</span>
+          </div>
+          <div class="scene-weather" aria-hidden="true">☀ 好天气，去探险</div>
+          <div id="gate" class="gate" aria-hidden="true"><span></span><span></span></div>
+          <div class="animal-area" id="animal-area">
+            <button
+              class="animal animal-cow"
+              id="cow"
+              data-animal="cow"
+              aria-label="选择小牛"
+              disabled
+            >
+              <span class="animal-halo"></span
+              ><img src="/assets/cow.svg" alt="小牛" draggable="false" /><span
+                class="animal-heart"
+                aria-hidden="true"
+                >♥</span
+              >
+            </button>
+            <button
+              class="animal animal-pig"
+              id="pig"
+              data-animal="pig"
+              aria-label="选择小猪"
+              disabled
+            >
+              <span class="animal-halo"></span
+              ><img src="/assets/pig.svg" alt="小猪" draggable="false" /><span
+                class="animal-heart"
+                aria-hidden="true"
+                >♥</span
+              >
+            </button>
+          </div>
+          <div id="flowers" class="flowers" aria-hidden="true"></div>
+          <div class="route-cue" id="route-cue" hidden>✦ Lily 在这里等你</div>
+          <span class="helper-badge" id="helper-badge" hidden
+            ><svg><use href="#heart" /></svg>农场小帮手</span
+          >
+          <div class="welcome-panel" id="welcome-panel">
+            <span class="welcome-stamp">HELLO, LITTLE EXPLORER</span>
+            <h2>和 Lily 一起，<br />认识新朋友。</h2>
+            <p>听听声音，点点动物。<br />不用读单词，也不用急着说。</p>
+            <button class="primary-button" id="start-button">
+              <svg><use href="#play" /></svg><span id="start-label">去农场玩</span></button
+            ><button class="text-button" id="fresh-button" hidden>重新开始一节</button
+            ><small>声音已准备好 · 不开启麦克风</small>
+          </div>
+          <div class="scene-toast" id="scene-toast" role="status" hidden></div>
+          <div class="pause-panel" id="pause-panel" hidden>
+            <img src="/assets/lily.svg" alt="Lily" />
+            <h2>休息一下也很好。</h2>
+            <p>农场会在这里等你。</p>
+            <button id="resume-button" class="primary-button">
+              <svg><use href="#play" /></svg>继续玩</button
+            ><button id="exit-button" class="text-button">今天先到这里</button>
+          </div>
+          <div class="complete-panel" id="complete-panel" hidden>
+            <span class="complete-flower" aria-hidden="true">✿</span>
+            <p class="eyebrow">今天的农场旅程</p>
+            <h2 id="complete-title">谢谢你，小小探索家！</h2>
+            <p>听一听，试一试，都是很棒的开始。</p>
+            <div>
+              <button class="primary-button" id="report-button">看看今天的小发现</button
+              ><button class="text-button" id="again-button">再玩一节</button>
+            </div>
+          </div>
+        </section>
+        <section class="teacher-card" aria-label="Lily 的提示">
+          <div class="teacher-portrait">
+            <img src="/assets/lily.svg" alt="老师 Lily" /><span>Lily</span>
+          </div>
+          <div class="teacher-message">
+            <div class="speaking-label" id="speaking-label">
+              <svg><use href="#sound" /></svg><span id="audio-status">准备好小耳朵</span
+              ><span class="sound-bars" id="sound-bars" hidden><i></i><i></i><i></i></span>
+            </div>
+            <h2 id="instruction">准备好了吗？我们去看看动物朋友。</h2>
+            <p id="instruction-detail">想停就停，想再听就再听。</p>
+          </div>
+          <button class="primary-button continue-button" id="continue-button" hidden>
+            继续探索
+          </button>
+        </section>
+        <nav class="lesson-controls" aria-label="课程操作">
+          <div class="support-controls">
+            <button class="control-button" id="replay-button" disabled>
+              <svg><use href="#replay" /></svg>再听一遍</button
+            ><button class="control-button" id="help-button" disabled>
+              <svg><use href="#help" /></svg>帮帮我</button
+            ><button class="control-button" id="plant-button" hidden>
+              <svg><use href="#leaf" /></svg>种一朵花
+            </button>
+          </div>
+          <span class="gentle-note" id="gentle-note">可以安静地听，也可以大声地说。</span
+          ><button class="skip-button" id="skip-button" hidden>先跳过</button>
+        </nav>
+        <footer><span>一小步，一点点发现。</span><span>适合亲子一起探索 · 没有倒计时</span></footer>
+      </main>
+    </div>
+    <dialog id="parent-dialog">
+      <button class="dialog-close" id="close-parent" aria-label="关闭家长小贴士">×</button>
+      <p class="eyebrow">给陪伴孩子的你</p>
+      <h2>让好奇心带路。</h2>
+      <p>先听清楚，再让孩子点选动物。不必翻译每句话，也不需要催促回答。</p>
+      <ul>
+        <li>第一次接触：可以陪孩子看一看、点一点。</li>
+        <li>需要帮助：点“帮帮我”，提示会逐步增加。</li>
+        <li>想说就说：本课不会录音，也不进行发音评分。</li>
+        <li>累了就暂停：刷新页面后，也能继续这段旅程。</li>
+      </ul>
+      <label class="volume-setting"
+        >语音音量
+        <input id="volume-control" type="range" min="0.25" max="1" step="0.05" value="0.85"
+      /></label>
+      <p class="dialog-note">固定语音由本机英语声线合成，运行时无需联网。学习观察保存在本机。</p>
+    </dialog>
+    <dialog id="report-dialog">
+      <button class="dialog-close" id="close-report" aria-label="关闭本次观察">×</button>
+      <p class="eyebrow">本次观察 · 仅供家长参考</p>
+      <h2>每次尝试，都有小发现。</h2>
+      <div id="report-content"></div>
+      <p class="dialog-note">
+        这是本次游戏中的表现，不代表已经稳定掌握。隔天换个场景再认一认，会更有参考价值。
+      </p>
+    </dialog>
+    <dialog id="access-dialog">
+      <p class="eyebrow">本地课堂已设置访问口令</p>
+      <h2>请由家长解锁。</h2>
+      <form id="access-form">
+        <label
+          >访问口令<input id="access-token" type="password" autocomplete="off" required /></label
+        ><button class="primary-button" type="submit">解锁课堂</button>
+      </form>
+      <p class="dialog-note">口令仅用于当前页面，不会保存到浏览器。</p>
+    </dialog>
+    <noscript><p>请启用浏览器 JavaScript，才能播放课程并选择动物。</p></noscript>
+  </body>
+</html>

@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Lily · Minecraft 语音伴随</title>
+    <link rel="stylesheet" href="/assets/bedrock.css" />
+  </head>
+  <body>
+    <main>
+      <p class="eyebrow">LILY'S LITTLE FARM</p>
+      <h1>听 Lily 说，在游戏里探索</h1>
+      <p>保持这个页面打开，返回 Minecraft 与 Lily 和动物互动。无需麦克风。</p>
+      <form id="connect-form">
+        <label
+          >课堂编号 <input id="bridge" value="farm_m3_01" required pattern="[A-Za-z0-9_-]{1,60}"
+        /></label>
+        <label>课堂口令（如已设置）<input id="token" type="password" autocomplete="off" /></label>
+        <button type="submit">连接并启用声音</button>
+      </form>
+      <section aria-live="polite" class="status">
+        <img src="/assets/lily.svg" alt="Lily" width="80" height="80" />
+        <div>
+          <h2 id="status">等待连接课堂</h2>
+          <p id="step">请先在游戏中完成连接和玩家绑定。</p>
+        </div>
+      </section>
+      <div id="controls" hidden>
+        <div class="buttons">
+          <button data-control="START">开始</button
+          ><button data-control="CONTINUE">继续探索</button>
+          <button data-control="REPLAY">再听一次</button><button data-control="HELP">帮帮我</button>
+          <button data-control="PAUSE">暂停</button><button data-control="RESUME">恢复</button>
+          <button data-control="SKIP">跳过这一步</button
+          ><button data-control="EXIT">结束本次</button>
+        </div>
+        <label
+          >音量 <input id="volume" type="range" min="0.25" max="1" step="0.05" value="0.85"
+        /></label>
+        <button id="enable-audio" type="button">启用／重试声音</button>
+      </div>
+      <p class="note">游戏未连接、目标不可见或课堂暂停时，语音会等待。自愿说话环节可以直接跳过。</p>
+      <p id="error" role="alert"></p>
+    </main>
+    <script type="module" src="/js/bedrock-page.js"></script>
+  </body>
+</html>

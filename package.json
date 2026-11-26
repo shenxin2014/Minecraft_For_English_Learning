@@ -1,0 +1,22 @@
+{
+  "name": "english-farm",
+  "version": "0.4.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --test frontend/tests/*.test.js bedrock-pack/tests/*.test.js",
+    "check": "eslint frontend/js frontend/tests bedrock-pack && tsc -p bedrock-pack/tsconfig.json && tsc -p bedrock-pack/tsconfig.diagnostic.json && prettier --check frontend bedrock-pack package.json eslint.config.js",
+    "format": "prettier --write frontend bedrock-pack package.json eslint.config.js"
+  },
+  "devDependencies": {
+    "@eslint/js": "10.0.1",
+    "@minecraft/server": "2.11.0",
+    "@minecraft/server-admin": "1.0.0-beta.1.26.66-stable",
+    "@minecraft/server-net": "1.0.0-beta.1.26.66-stable",
+    "@minecraft/server-v2": "npm:@minecraft/server@2.0.0",
+    "eslint": "10.15.0",
+    "globals": "16.5.0",
+    "prettier": "3.10.1",
+    "typescript": "7.0.2"
+  }
+}

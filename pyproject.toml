@@ -1,0 +1,34 @@
+[project]
+name = "minecraft-ai-english"
+version = "0.4.0"
+description = "可离线运行的 Minecraft 英语启蒙课程引擎"
+requires-python = ">=3.12,<3.13"
+dependencies = ["fastapi==0.139.0", "pydantic==2.13.4", "uvicorn==0.51.0"]
+
+[project.optional-dependencies]
+dev = ["pytest>=8,<10", "httpx==0.28.1", "PyYAML>=6,<7", "ruff>=0.14,<1"]
+
+[build-system]
+requires = ["setuptools>=78"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["backend"]
+include = ["app*"]
+
+[tool.pytest.ini_options]
+testpaths = ["backend/tests"]
+pythonpath = ["backend", "scripts"]
+
+[tool.ruff]
+target-version = "py312"
+line-length = 100
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP", "C90"]
+
+[tool.ruff.lint.mccabe]
+max-complexity = 8
+
+[tool.ruff.lint.isort]
+known-first-party = ["app"]
